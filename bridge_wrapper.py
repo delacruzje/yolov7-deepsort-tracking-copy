@@ -34,6 +34,11 @@ config.gpu_options.allow_growth = True
 # Define an array to store unique track IDs
 unique_track_ids = []
 
+# Clear unique IDS
+def clear_unique_track_ids():
+    global unique_track_ids
+    unique_track_ids = []
+
 class YOLOv7_DeepSORT:
     '''
     Class to Wrap ANY detector  of YOLO type with DeepSORT
