@@ -34,11 +34,6 @@ config.gpu_options.allow_growth = True
 # Define an array to store unique track IDs
 unique_track_ids = []
 
-# Clear unique IDS
-def clear_unique_track_ids():
-    global unique_track_ids
-    unique_track_ids = []
-
 class YOLOv7_DeepSORT:
     '''
     Class to Wrap ANY detector  of YOLO type with DeepSORT
@@ -63,6 +58,11 @@ class YOLOv7_DeepSORT:
         self.encoder = create_box_encoder(reID_model_path, batch_size=1)
         metric = nn_matching.NearestNeighborDistanceMetric("cosine", max_cosine_distance, nn_budget) # calculate cosine distance metric
         self.tracker = Tracker(metric) # initialize tracker
+
+    # Clear unique IDS
+    def clear_unique_track_ids():
+    global unique_track_ids
+    unique_track_ids = []
     
     def track_video(self,video:str, output:str, skip_frames:int=0, show_live:bool=False, count_objects:bool=False, verbose:int = 0):
         '''
@@ -184,3 +184,5 @@ class YOLOv7_DeepSORT:
                 if cv2.waitKey(1) & 0xFF == ord('q'): break
         
         cv2.destroyAllWindows()
+
+
