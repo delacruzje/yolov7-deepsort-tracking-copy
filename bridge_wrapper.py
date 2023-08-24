@@ -154,9 +154,15 @@ class YOLOv7_DeepSORT:
                 cv2.rectangle(frame, (int(bbox[0]), int(bbox[1]-30)), (int(bbox[0])+(len(class_name)+len(str(track.track_id)))*17, int(bbox[1])), color, -1)
                 cv2.putText(frame, class_name + " : " + str(track.track_id),(int(bbox[0]), int(bbox[1]-11)),0, 0.6, (255,255,255),1, lineType=cv2.LINE_AA)    
 
+                unique_track_ids = []
+                
                 if verbose == 2:
-                    print("Tracker ID: {}, Class: {},  BBox Coords (xmin, ymin, xmax, ymax): {}".format(str(track.track_id), class_name, (int(bbox[0]), int(bbox[1]), int(bbox[2]), int(bbox[3]))))
-                    
+                    track_id = track.track_id
+
+                    if track_id not in unique_track_ids:
+                        unique_track_ids.append(track_id)
+
+                    print("Tracker ID: {}, Class: {},  BBox Coords (xmin, ymin, xmax, ymax): {}, Unique ID: {}".format(str(track.track_id), class_name, (int(bbox[0]), int(bbox[1]), int(bbox[2]), int(bbox[3])),len(unique_track_ids)))   
             # -------------------------------- Tracker work ENDS here -----------------------------------------------------------------------
             if verbose >= 1:
                 fps = 1.0 / (time.time() - start_time) # calculate frames per second of running detections
