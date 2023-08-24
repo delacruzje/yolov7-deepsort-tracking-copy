@@ -31,7 +31,8 @@ from detection_helpers import *
 config = ConfigProto()
 config.gpu_options.allow_growth = True
 
-
+# Define an array to store unique track IDs
+unique_track_ids = []
 
 class YOLOv7_DeepSORT:
     '''
@@ -57,8 +58,6 @@ class YOLOv7_DeepSORT:
         self.encoder = create_box_encoder(reID_model_path, batch_size=1)
         metric = nn_matching.NearestNeighborDistanceMetric("cosine", max_cosine_distance, nn_budget) # calculate cosine distance metric
         self.tracker = Tracker(metric) # initialize tracker
-
-    unique_track_ids = []
     
     def track_video(self,video:str, output:str, skip_frames:int=0, show_live:bool=False, count_objects:bool=False, verbose:int = 0):
         '''
