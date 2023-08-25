@@ -31,9 +31,6 @@ from detection_helpers import *
 config = ConfigProto()
 config.gpu_options.allow_growth = True
 
-# Define an array to store unique track IDs
-unique_track_ids = []
-
 class YOLOv7_DeepSORT:
     '''
     Class to Wrap ANY detector  of YOLO type with DeepSORT
@@ -58,14 +55,6 @@ class YOLOv7_DeepSORT:
         self.encoder = create_box_encoder(reID_model_path, batch_size=1)
         metric = nn_matching.NearestNeighborDistanceMetric("cosine", max_cosine_distance, nn_budget) # calculate cosine distance metric
         self.tracker = Tracker(metric) # initialize tracker
-
-        # initialize unique_track_ids
-        self.unique_track_ids = []
-
-    # Clear unique IDs
-    def clear_unique_track_ids(self):
-        global unique_track_ids
-        self.unique_track_ids = []
     
     def track_video(self,video:str, output:str, skip_frames:int=0, show_live:bool=False, count_objects:bool=False, verbose:int = 0):
         '''
@@ -162,16 +151,11 @@ class YOLOv7_DeepSORT:
                 cv2.rectangle(frame, (int(bbox[0]), int(bbox[1])), (int(bbox[2]), int(bbox[3])), color, 2)
                 cv2.rectangle(frame, (int(bbox[0]), int(bbox[1]-30)), (int(bbox[0])+(len(class_name)+len(str(track.track_id)))*17, int(bbox[1])), color, -1)
                 cv2.putText(frame, class_name + " : " + str(track.track_id),(int(bbox[0]), int(bbox[1]-11)),0, 0.6, (255,255,255),1, lineType=cv2.LINE_AA)    
-
-                global unique_track_ids
                 
                 if verbose == 2:
                     track_id = track.track_id
 
-                    if track_id not in unique_track_ids:
-                        unique_track_ids.append(track_id)
-
-                    print("Tracker ID: {}, Class: {},  BBox Coords (xmin, ymin, xmax, ymax): {}, Unique ID: {}".format(str(track.track_id), class_name, (int(bbox[0]), int(bbox[1]), int(bbox[2]), int(bbox[3])),len(unique_track_ids)))   
+                    print("Tracker ID: {}, Class: {},  BBox Coords (xmin, ymin, xmax, ymax): {}".format(str(track.track_id), class_name, (int(bbox[0]), int(bbox[1]), int(bbox[2]), int(bbox[3]))))   
             # -------------------------------- Tracker work ENDS here -----------------------------------------------------------------------
             if verbose >= 1:
                 fps = 1.0 / (time.time() - start_time) # calculate frames per second of running detections
