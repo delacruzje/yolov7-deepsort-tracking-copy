@@ -64,6 +64,7 @@ class YOLOv7_DeepSORT:
 
     # Clear unique IDs
     def clear_unique_track_ids(self):
+        global unique_track_ids
         self.unique_track_ids = []
     
     def track_video(self,video:str, output:str, skip_frames:int=0, show_live:bool=False, count_objects:bool=False, verbose:int = 0):
