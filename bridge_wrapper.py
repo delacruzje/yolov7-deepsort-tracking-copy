@@ -31,7 +31,7 @@ config = ConfigProto()
 config.gpu_options.allow_growth = True
 
 # create global variables
-global fps_track = []
+fps_track = []
 
 class YOLOv7_DeepSORT:
     '''
