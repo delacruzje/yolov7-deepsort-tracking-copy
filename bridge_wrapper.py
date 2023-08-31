@@ -26,10 +26,12 @@ from deep_sort.tracker import Tracker
 from tracking_helpers import read_class_names, create_box_encoder
 from detection_helpers import *
 
-
  # load configuration for object detector
 config = ConfigProto()
 config.gpu_options.allow_growth = True
+
+# create global variables
+fps_track = []
 
 class YOLOv7_DeepSORT:
     '''
@@ -156,13 +158,12 @@ class YOLOv7_DeepSORT:
 
                     print("Tracker ID: {}, Class: {},  BBox Coords (xmin, ymin, xmax, ymax): {}".format(str(track.track_id), class_name, (int(bbox[0]), int(bbox[1]), int(bbox[2]), int(bbox[3]))))   
             # -------------------------------- Tracker work ENDS here -----------------------------------------------------------------------
-            max_fps = 0
-            ave_fps = 0
             if verbose >= 1:
                 fps = 1.0 / (time.time() - start_time) # calculate frames per second of running detections
-                if fps > max_fps: max_fps = fps # get maximum frames per second
-                if not count_objects: print(f"Processed frame no: {frame_num} || Current FPS: {round(fps,2)} || Max FPS: {round(max_fps,2)}")
-                else: print(f"Processed frame no: {frame_num} || Current FPS: {round(fps,2)} || Objects tracked: {count} || Max FPS: {round(max_fps,2)}")
+                fps_track.append(fps)
+                average_fps = sum(fps_track) / len(fps_track)
+                if not count_objects: print(f"Processed frame no: {frame_num} || Current FPS: {round(fps,2)}")
+                else: print(f"Processed frame no: {frame_num} || Current FPS: {round(fps,2)} || Objects tracked: {count} || Average FPS: {round(average_fps,2)}")
             
             result = np.asarray(frame)
             result = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
