@@ -156,9 +156,12 @@ class YOLOv7_DeepSORT:
 
                     print("Tracker ID: {}, Class: {},  BBox Coords (xmin, ymin, xmax, ymax): {}".format(str(track.track_id), class_name, (int(bbox[0]), int(bbox[1]), int(bbox[2]), int(bbox[3]))))   
             # -------------------------------- Tracker work ENDS here -----------------------------------------------------------------------
+            max_fps = 0
+            ave_fps = 0
             if verbose >= 1:
                 fps = 1.0 / (time.time() - start_time) # calculate frames per second of running detections
-                if not count_objects: print(f"Processed frame no: {frame_num} || Current FPS: {round(fps,2)}")
+                    if fps > max_fps: max_fps = fps # get maximum frames per second
+                if not count_objects: print(f"Processed frame no: {frame_num} || Current FPS: {round(fps,2)} || Max FPS: {round(max_fps,2)}")
                 else: print(f"Processed frame no: {frame_num} || Current FPS: {round(fps,2)} || Objects tracked: {count}")
             
             result = np.asarray(frame)
