@@ -87,6 +87,7 @@ class YOLOv7_DeepSORT:
             return_value, frame = vid.read()
             if not return_value:
                 print('Video has ended or failed!')
+                fps_track = []
                 break
             frame_num +=1
 
