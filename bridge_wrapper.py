@@ -31,7 +31,7 @@ config = ConfigProto()
 config.gpu_options.allow_growth = True
 
 # create global variables
-fps_track = []
+global fps_track = []
 
 class YOLOv7_DeepSORT:
     '''
@@ -87,7 +87,7 @@ class YOLOv7_DeepSORT:
             return_value, frame = vid.read()
             if not return_value:
                 print('Video has ended or failed!')
-                fps_track = []
+                global fps_track = []
                 break
             frame_num +=1
 
